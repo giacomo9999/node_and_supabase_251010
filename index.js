@@ -1,9 +1,15 @@
 const express = require('express')
 const cors = require('cors')
-const pool = require('./db')
+const { createClient } = require('@supabase/supabase-js')
+require('dotenv').config()
+
 
 const app = express()
 const PORT = 3000 || process.env.PORT
+const SUPABASE_URL = process.env.SUPABASE_URL
+const SUPABASE_ANON_KEY = process.env.SUPABASE_API_KEY
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -14,13 +20,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/events', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM events')
-        res.status(200).json(result.rows)
-    } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: 'Database Error' })
+    const { data, error } = await supabase.from('events').select('*')
+    if (error) {
+        console.error(error)
+        return res.status(500).json({ error: error.message })
     }
+    res.json(data)
 })
 
 app.listen(PORT, () => {
