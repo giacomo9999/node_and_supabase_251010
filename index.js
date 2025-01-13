@@ -1,17 +1,17 @@
 const express = require('express')
 const cors = require('cors')
-const { createClient } = require('@supabase/supabase-js')
-// const pool = require('./db')
+// const { createClient } = require('@supabase/supabase-js')
+const pool = require('./db')
 require('dotenv').config()
 
 const app = express()
 const PORT = 3000 || process.env.PORT
 
 // URL-and-API-key approach:
-const SUPABASE_URL = process.env.SUPABASE_URL
-const SUPABASE_ANON_KEY = process.env.SUPABASE_API_KEY
+// const SUPABASE_URL = process.env.SUPABASE_URL
+// const SUPABASE_ANON_KEY = process.env.SUPABASE_API_KEY
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+// const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
